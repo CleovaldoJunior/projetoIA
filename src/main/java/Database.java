@@ -33,20 +33,19 @@ public class Database {
 
     public static void main(String[] args) throws SQLException {
         connect();
-        String frase = "Tobby is a great actor and he likes to eat oranges while he's watching tigers";
+        String frase = "a pearson has a name and cpf";
         List<CoreLabel> tokens = entidades(frase);
+        boolean flag_entidade = false;
+        ArrayList<String> atts = new ArrayList<>();
         for(CoreLabel entidade: tokens){
-            System.out.println(entidade.word());
-            switch (entidade.tag()) {
-                case "NNP":
-                    cria_tabela("PERSON");
-                    break;
-                case "NN":
-                    cria_tabela(entidade.word());
-                    break;
-                case "NNS":
-                    cria_tabela(entidade.word());
-                    break;
+            String tag_atual = entidade.word();
+            if(tag_atual.equals("NN")){
+                flag_entidade = true;
+            }
+            if(flag_entidade){
+                if(tag_atual.equals("NN")){
+                    System.out.println(true);
+                }
             }
         }
         disconnect();
