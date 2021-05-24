@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class GUI {
     private JPanel panel1;
@@ -15,9 +16,12 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String text = entradaTextField.getText();
-                System.out.println(text);
+                try {
+                    Database.run(text);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 resultLabel.setText(text);
-
             }
         });
     }
