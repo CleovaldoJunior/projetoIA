@@ -19,9 +19,17 @@ public class Database {
     public static void disconnect()throws SQLException{
         conn.close();
     }
-    public static void cria_tabela(String nome_tabela) throws SQLException {
+    public static void cria_tabela(ArrayList<String> tabela) {
+        String nome_tabela = tabela.get(0);
+        StringBuilder atts = new StringBuilder("(id SERIAL,");
+
+        for(String s: tabela.subList(1, tabela.size()-1)){
+            atts.append(s).append(" VARCHAR(255)").append(",");
+        }
+        atts.append(tabela.get(tabela.size()-1)).append(" VARCHAR(255))");
+
         try (Statement st = conn.createStatement()){
-            st.execute("CREATE TABLE IF NOT EXISTS "+nome_tabela+"()");
+            st.execute("CREATE TABLE IF NOT EXISTS "+nome_tabela+atts);
             conn.commit();
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -51,7 +59,6 @@ public class Database {
         ArrayList<String> atts_atual = new ArrayList<>();
         for(CoreLabel entidade: tokens){
             ArrayList<String> entidade_atual = NamedEntity(entidade.word());
-            System.out.println(entidade.word()+" "+entidade.tag()+" "+entidade_atual);
             String tag_atual = entidade.tag();
             if(flag_entidade){
                 if(entidade_atual.isEmpty()){
@@ -78,20 +85,20 @@ public class Database {
                 }else{
                     atts_atual.add(entidade_atual.get(0));
                 }
-
             }
-            System.out.println("atts_atual: "+atts_atual);
         }
         entidades_geral.add(atts_atual);
         return entidades_geral;
     }
 
-    public static void run(String frase) throws SQLException {
+    public static ArrayList<String> run(String frase) throws SQLException {
         ArrayList<ArrayList<String>> entidades = pega_entidades(frase);
+        ArrayList<String> entidades_return = new ArrayList<>();
         for(ArrayList<String> celula: entidades){
-            System.out.println(celula.get(0));
-            cria_tabela(celula.get(0));
+            cria_tabela(celula);
+            entidades_return.add(celula.get(0));
         }
+        return entidades_return;
     }
 
     public static List<CoreLabel> entidades(String text){
