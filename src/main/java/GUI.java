@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class GUI {
     private JPanel panel1;
@@ -17,11 +18,13 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String text = entradaTextField.getText();
                 try {
-                    Database.run(text);
+                    resultLabel.setText("Criando tabelas...");
+                    ArrayList<String> entidades = Database.run(text);
+                    resultLabel.setText("Tabela: "+entidades.toString()+" Criada");
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-                resultLabel.setText(text);
+
             }
         });
     }
