@@ -1,6 +1,8 @@
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.*;
 
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Token {

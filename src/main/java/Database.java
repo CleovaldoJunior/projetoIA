@@ -11,9 +11,10 @@ import java.util.Properties;
 public class Database {
     public static Connection conn;
 
-    public static void connect() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/projetoIA";
-        conn = DriverManager.getConnection(url, "postgres","lacunar1");
+    public static void connect(String nome, String usuario, String senha, String servidor, String porta) throws SQLException {
+        String url = "jdbc:postgresql://"+servidor+":"+porta+"/"+nome;
+        System.out.println(url);
+        conn = DriverManager.getConnection(url, usuario,senha);
         conn.setAutoCommit(false);
     }
     public static void disconnect()throws SQLException{
@@ -26,6 +27,7 @@ public class Database {
         for(String s: tabela.subList(1, tabela.size()-1)){
             atts.append(s).append(" VARCHAR(255)").append(",");
         }
+
         atts.append(tabela.get(tabela.size()-1)).append(" VARCHAR(255))");
 
         try (Statement st = conn.createStatement()){
@@ -52,7 +54,6 @@ public class Database {
     }
 
     public static ArrayList<ArrayList<String>> pega_entidades(String frase) throws SQLException {
-        connect();
         ArrayList<ArrayList<String>> entidades_geral = new ArrayList<>();
         List<CoreLabel> tokens = entidades(frase);
         boolean flag_entidade = false;
